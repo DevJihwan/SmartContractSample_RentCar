@@ -7,10 +7,10 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            rentalInstance: null,
-            myAccount: null,
-            myRentCar: 0,
-            web3: null
+            rentalInstance: "",     //react의 경우 state가 비동기이기 떄문에, 
+            myAccount: "",          //처음 마운트(렌더링)하기 전에 동작함. 그렇기 때문에 state가 null 과 같이 정의 되지 않은 경우 
+            myRentCar: 0,           //error 발생(Uncaught TypeError: Cannot read property ...), 최소한 타입이라도 정해두자.
+            web3: ""
         };
      }
     componentWillMount() {
@@ -20,6 +20,7 @@ class App extends Component {
                 web3: results.web3
             });
             this.instantiateContract();
+            console.log("TEST");
        }).catch(() => {
            console.log("Error finding web3.");
        });
@@ -40,11 +41,12 @@ class App extends Component {
                 });
             }
         });
+        //console.log(this.setState);
      }
     rentCar() {
         this.state.rentalInstance.rentCar({
             from: this.state.myAccount,                 //RetalCar.sol의 parameter로 넘겨줄 값들 (From, value, gas)
-            value: this.state.web3.toWei(10, "ether"),
+            value: this.state.web3.utils.toWei("10", "ether"),
             gas: 900000
         });
     }
