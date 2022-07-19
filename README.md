@@ -13,8 +13,13 @@
     03. cd <프로젝트 폴더>
     04. truffle unbox react         (프로젝트 생성)
 
-# contracts폴더에서 business 작성 
+# SmartContract 개발 순서
+    <ol>1. contracts폴더에서 business 작성</<ol>
 
 # migrations에서 deploy 
 
 # client - src - contracts 에서 생성된 Js 파일 확인
+
+# getWeb3.js의 생성 : contract와 메타마스크 연결을 지원함. 
+
+# npm install @truffle/contract

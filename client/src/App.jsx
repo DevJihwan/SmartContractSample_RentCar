@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import RentalCarContract from "./contracts/RentalCar.json";
-import getWeb3 from "./utils/getWeb3";
+import getWeb3 from "./getWeb3.js";
 import "./App.css";
 
 class App extends Component {
@@ -25,7 +25,7 @@ class App extends Component {
        });
     }
     instantiateContract() {
-        const contract = require("truffle-contract");
+        const contract = require("@truffle/contract");
         const rentalcar = contract(RentalCarContract);
         rentalcar.setProvider(this.state.web3.currentProvider);
         //Ganache에서 만들어진 10개의 계정 중 제일 첫 번째 계정 할당 
