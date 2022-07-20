@@ -15,6 +15,7 @@ class App extends Component {
      }
     componentWillMount() {
         //web3 할당
+        console.log(getWeb3);
         getWeb3.then(results => {
             this.setState({
                 web3: results.web3
@@ -46,7 +47,7 @@ class App extends Component {
     rentCar() {
         this.state.rentalInstance.rentCar({
             from: this.state.myAccount,                 //RetalCar.sol의 parameter로 넘겨줄 값들 (From, value, gas)
-            value: this.state.web3.utils.toWei("10", "ether"),
+            value: this.state.web3.toWei('10', 'ether'),
             gas: 900000
         });
     }
