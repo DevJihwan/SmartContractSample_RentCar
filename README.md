@@ -22,3 +22,6 @@
 
 # npm install @truffle/contract
 -   [npm] : https://www.npmjs.com/package/@truffle/contract
+
+# To-do
+    01. getWeb3.js 정비 => web3.isConneted() error 해결
