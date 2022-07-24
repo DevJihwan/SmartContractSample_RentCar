@@ -15,7 +15,7 @@ class App extends Component {
      }
     componentWillMount() {
         //web3 할당
-        console.log(getWeb3);
+        console.log("#########Start componetWillMount########");
         getWeb3.then(results => {
             this.setState({
                 web3: results.web3
@@ -27,8 +27,10 @@ class App extends Component {
        });
     }
     instantiateContract() {
+        console.log("#########Start instantiateContract########");
         const contract = require("@truffle/contract");
         const rentalcar = contract(RentalCarContract);
+        console.log("#########this.state.window.ethereum########"+this.state.window.ethereum);
         rentalcar.setProvider(this.state.window.ethereum);
         //Ganache에서 만들어진 10개의 계정 중 제일 첫 번째 계정 할당 
         this.state.web3.eth.getAccounts((error, accounts) => {
