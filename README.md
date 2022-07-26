@@ -16,7 +16,7 @@
 
 # SmartContract 개발 순서
     <ol>1. contracts폴더에서 business 작성</ol>
-        2. migrations에서 deploy 
+        2. migrations에서 deploy {truffle migrate}
         3. client - src - contracts 에서 생성된 Js 파일 확인
         4. getWeb3.js의 생성 : contract와 메타마스크 연결을 지원함. 
 
