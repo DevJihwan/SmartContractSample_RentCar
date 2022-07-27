@@ -13,44 +13,59 @@ class App extends Component {
             web3: null
         };
      }
-     UNSAFE_componentWillMount() {
-        console.log("#########START componetWillMount########");
+     componentDidMount() {
+        console.log("#########START componetDidMount########");
+
+
         getWeb3.then(results => {
-            console.log("#########Step01.componentWillMount : results########"+results);
-            this.setState({
-                web3: results
-            });
-            this.instantiateContract();
+            console.log("#########Step01.componetDidMount : results########"+results);
+
+            let _web3 = results;
+            // this.setState({
+            //     web3: results.currentProvider
+            // });
+            this.instantiateContract(_web3);
        }).catch(() => {
            console.log("Error finding web3.");
        });
+
     }
-    instantiateContract = async() => {
+    
+    instantiateContract = async(__web3) => {
         console.log("#########START instantiateContract########");
+
+        this.setState({
+            web3: __web3,
+            myAccount: __web3.currentProvider.selectedAddress
+        });
+
         const contract = require("@truffle/contract");
         const rentalcar = contract(RentalCarContract);
         console.log("#########Step01.instantiateContract : rentalcar########"+rentalcar);
 
-        const _web3 = await this.state.web3;
-        console.log("#########Step02.instantiateContract : _web3########"+_web3);
-
-        rentalcar.setProvider(_web3.currentProvider);
-        this.state.web3.eth.getAccounts((error, accounts) => {
-            if (!error) {
-                rentalcar.deployed().then(instance => {
-                    this.setState({
-                        rentalInstance: instance,
-                        myAccount: accounts[0]
-                    });
-                    this.updateRentCar();
-                });
-            }
+        rentalcar.setProvider(__web3.currentProvider);    
+        
+        rentalcar.deployed().then(instance => {
+            this.setState({
+                rentalInstance: instance,
+            });
         });
-     }
+
+        let updateRentcarNo = 10;
+        //await this.state.rentalInstance.getMyRentCar();
+
+        this.setState({
+            myRentCar: updateRentcarNo
+        });
+
+        //this.updateRentCar();
+        console.log("#########END instantiateContract########");
+    }
+
     rentCar() {
         this.state.rentalInstance.rentCar({
             from: this.state.myAccount,
-            value: this.state.web3.utils.toWei(10, "ether"),
+            value: this.state.web3.utils.toWei("10", "ether"),
             gas: 900000
         });
     }
@@ -60,11 +75,15 @@ class App extends Component {
             gas: 900000
         });
     }
+    /*
     updateRentCar() {
+        console.log("#########START updateRentCar########");
         this.state.rentalInstance.getMyRentCar().then(result => {
             this.setState({ myRentCar: result.toNumber() });
         });
     }
+    */
+
     render() {
         const imgStyle = {
             width: "500px",
