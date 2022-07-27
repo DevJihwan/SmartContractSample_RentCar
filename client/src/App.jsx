@@ -7,49 +7,50 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            rentalInstance: "",     //react의 경우 state가 비동기이기 떄문에, 
-            myAccount: "",          //처음 마운트(렌더링)하기 전에 동작함. 그렇기 때문에 state가 null 과 같이 정의 되지 않은 경우 
-            myRentCar: 0,           //error 발생(Uncaught TypeError: Cannot read property ...), 최소한 타입이라도 정해두자.
-            web3: ""
+            rentalInstance: null,
+            myAccount: null,
+            myRentCar: 0,
+            web3: null
         };
      }
-    componentWillMount() {
-        //web3 할당
-        console.log("#########Start componetWillMount########");
+     UNSAFE_componentWillMount() {
+        console.log("#########START componetWillMount########");
         getWeb3.then(results => {
+            console.log("#########Step01.componentWillMount : results########"+results);
             this.setState({
-                web3: results.web3
+                web3: results
             });
             this.instantiateContract();
-            console.log("TEST");
        }).catch(() => {
            console.log("Error finding web3.");
        });
     }
-    instantiateContract() {
-        console.log("#########Start instantiateContract########");
+    instantiateContract = async() => {
+        console.log("#########START instantiateContract########");
         const contract = require("@truffle/contract");
         const rentalcar = contract(RentalCarContract);
-        console.log("#########this.state.window.ethereum########"+this.state.window.ethereum);
-        rentalcar.setProvider(this.state.window.ethereum);
-        //Ganache에서 만들어진 10개의 계정 중 제일 첫 번째 계정 할당 
+        console.log("#########Step01.instantiateContract : rentalcar########"+rentalcar);
+
+        const _web3 = await this.state.web3;
+        console.log("#########Step02.instantiateContract : _web3########"+_web3);
+
+        rentalcar.setProvider(_web3.currentProvider);
         this.state.web3.eth.getAccounts((error, accounts) => {
             if (!error) {
                 rentalcar.deployed().then(instance => {
                     this.setState({
                         rentalInstance: instance,
-                        myAccount: accounts[0] //제일 첫 번째 계정 인덱싱
+                        myAccount: accounts[0]
                     });
                     this.updateRentCar();
                 });
             }
         });
-        //console.log(this.setState);
      }
     rentCar() {
         this.state.rentalInstance.rentCar({
-            from: this.state.myAccount,                 //RetalCar.sol의 parameter로 넘겨줄 값들 (From, value, gas)
-            value: this.state.web3.toWei('10', 'ether'),
+            from: this.state.myAccount,
+            value: this.state.web3.utils.toWei(10, "ether"),
             gas: 900000
         });
     }
@@ -71,7 +72,7 @@ class App extends Component {
         };
         return (
             <div className="container">
-            <img src="http://img.danawa.com/cp_images/service/33/3396220/149723280362210120381.jpg"
+            <img         src="http://img.danawa.com/cp_images/service/33/3396220/149723280362210120381.jpg"
 style={imgStyle}/>
             <h4>하루 렌트 가격: 10 ETH</h4>
             <button type="button" className="btn btn-primary" onClick={() => this.rentCar()}>
