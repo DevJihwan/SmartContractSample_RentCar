@@ -1,15 +1,9 @@
-# React client
+# getWeb3.js
+    00. window.ethereum을 통해 로컬에서 연결한 metaMask 지갑 연결 
+    01. let web3는 Promise 객체이기 때문에 resolve()를 해줘야 완성
+            -> resolve는 parameter에서 지정한 이름이기 때문에 원하는 것으로 변경 가능
 
-This project is bootstraped with [Create React App](https://create-react-app.dev). It is unopinionated with only `web3.js` as an added dependency, so nothing stands in your way.
-
-## Getting started
-
-Run `npm start` to start the dev server.
-
-See all [available scripts](https://create-react-app.dev/docs/available-scripts).
-
-## Note on `react-scripts` version
-
-The installed version of `react-scripts` is 4.x instead of the latest 5.x, which uses Webpack 5. This is because Webpack 5 no longer auto-polyfills Node.js core modules, which `web3.js` depends on.
-
-If you don't want to use `react-scripts` at 4.x, alternative solutions include [`eject`](https://create-react-app.dev/docs/available-scripts/#npm-run-eject) and [`react-app-rewired`](https://github.com/timarney/react-app-rewired) (See [instruction](https://github.com/ChainSafe/web3.js#web3-and-create-react-app)).
+# App.jsx
+    00. getWeb.js에서 resolve(web3)에 넣어준 값으로 let _web에 저장
+    01. state에 현재 렌트한 자동차 수, 지갑 주소 등을 저장 
+    02. componentDidmount()에서 .then()에서 시작

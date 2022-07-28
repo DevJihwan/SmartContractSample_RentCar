@@ -24,4 +24,5 @@
 -   [npm] : https://www.npmjs.com/package/@truffle/contract
 
 # To-do
-    01. getWeb3.js 정비 => web3.isConneted() error 해결
+    01. updateRentalCar 정비 -> 렌트한 차량 수 업데이트 반영
+    02. 현재 내 계좌 잔액 표시 
