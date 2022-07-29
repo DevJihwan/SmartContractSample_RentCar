@@ -10,7 +10,8 @@ class App extends Component {
             rentalInstance: null,
             myAccount: null,
             myRentCar: 0,
-            web3: null
+            web3: null,
+            myEthBalance: null
         };
      }
      componentDidMount() {
@@ -45,20 +46,17 @@ class App extends Component {
 
         rentalcar.setProvider(__web3.currentProvider);    
         
-        rentalcar.deployed().then(instance => {
-            this.setState({
-                rentalInstance: instance,
+        //truffle.deployed(): Create an instance of MyContract that represents the default address managed by MyContract
+
+        await rentalcar.deployed()
+            .then(instance => {
+                this.setState({
+                    rentalInstance: instance
+                    //myEthBalance: this.state.web3.eth.getBalance(this.state.myAccount)
+                });
             });
-        });
+            this.updateRentCar();
 
-        let updateRentcarNo = 10;
-        //await this.state.rentalInstance.getMyRentCar();
-
-        this.setState({
-            myRentCar: updateRentcarNo
-        });
-
-        //this.updateRentCar();
         console.log("#########END instantiateContract########");
     }
 
@@ -75,14 +73,17 @@ class App extends Component {
             gas: 900000
         });
     }
-    /*
+    
     updateRentCar() {
         console.log("#########START updateRentCar########");
-        this.state.rentalInstance.getMyRentCar().then(result => {
-            this.setState({ myRentCar: result.toNumber() });
-        });
+        console.log("#########STEP01. this.state.rentalInstance : ########" + this.state.rentalInstance);
+
+        let getMyRentCar = this.state.rentalInstance.getMyRentCar();
+
+        this.setState({ myRentCar: getMyRentCar.toNumber() });
+
+        console.log("#########END updateRentCar########");
     }
-    */
 
     render() {
         const imgStyle = {
