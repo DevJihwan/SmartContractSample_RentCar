@@ -16,15 +16,11 @@ class App extends Component {
      }
      componentDidMount() {
         console.log("#########START componetDidMount########");
-
-
+        //getWeb3.js에서 결과를 리턴 받는다. 
         getWeb3.then(results => {
             console.log("#########Step01.componetDidMount : results########"+results);
-
+            //받은 결과를 let web3에 저장
             let _web3 = results;
-            // this.setState({
-            //     web3: results.currentProvider
-            // });
             this.instantiateContract(_web3);
        }).catch(() => {
            console.log("Error finding web3.");
@@ -32,56 +28,97 @@ class App extends Component {
 
     }
     
+    //초기값 설정
     instantiateContract = async(__web3) => {
         console.log("#########START instantiateContract########");
 
+        //web3와 연결된 지갑 계좌 셋팅 
         this.setState({
             web3: __web3,
             myAccount: __web3.currentProvider.selectedAddress
         });
 
+        //스마트컨트랙트 내용 호출
         const contract = require("@truffle/contract");
         const rentalcar = contract(RentalCarContract);
-        console.log("#########Step01.instantiateContract : rentalcar########"+rentalcar);
 
+        console.log("#########Step01.instantiateContract : rentalcar########"+rentalcar);
         rentalcar.setProvider(__web3.currentProvider);    
         
-        //truffle.deployed(): Create an instance of MyContract that represents the default address managed by MyContract
+        //truffle.deployed()에 대한 설명
+        // => Create an instance of MyContract that represents the default address managed by MyContract
 
         await rentalcar.deployed()
             .then(instance => {
                 this.setState({
                     rentalInstance: instance
-                    //myEthBalance: this.state.web3.eth.getBalance(this.state.myAccount)
                 });
+                this.updateRentCar(instance);
             });
-            this.updateRentCar();
 
         console.log("#########END instantiateContract########");
     }
 
-    rentCar() {
+    rentCar = async() => {
+        console.log("#########START rentCar########");
+
+        console.log("#########STEP00. this.state.rentalInstance########"+this.state.rentalInstance);
+
         this.state.rentalInstance.rentCar({
             from: this.state.myAccount,
             value: this.state.web3.utils.toWei("10", "ether"),
             gas: 900000
         });
+
+        // this.state.rentalInstance.getMyRentCar().then(result => {
+        //     this.setState({ myRentCar: result.toNumber() });
+        // });
+
+        console.log("#########END rentCar########");
     }
-    returnRentCar() {
+    returnRentCar = async() => {
+        console.log("#########START returnRentCar########");
+
+        console.log("#########STEP00. this.state.rentalInstance########"+this.state.rentalInstance);
+
         this.state.rentalInstance.returnRentCar({
             from: this.state.myAccount,
             gas: 900000
         });
+
+        this.state.rentalInstance.getMyRentCar().then(result => {
+            this.setState({ myRentCar: result.toNumber() });
+        });
+
+        console.log("#########END returnRentCar########");
     }
     
-    updateRentCar() {
+    //내가 현재 빌린 자동차 수 업데이트 
+    updateRentCar = async(_param) => {
         console.log("#########START updateRentCar########");
-        console.log("#########STEP01. this.state.rentalInstance : ########" + this.state.rentalInstance);
+        console.log("#########STEP00. _param : ########" + _param);
 
-        let getMyRentCar = this.state.rentalInstance.getMyRentCar();
+        this.setState({
+            rentalInstance: _param
+        });
 
-        this.setState({ myRentCar: getMyRentCar.toNumber() });
+        console.log("#########STEP02. this.state.rentalInstance : ########" + this.state.rentalInstance);
 
+        //this.rentalInstance 값이 셋팅 되었는지 확인하고 진행한다. 
+        if(this.rentalInstance != null){
+
+            let getMyRentCar = await this.state.rentalInstance.getMyRentCar();
+
+            this.setState({ myRentCar: getMyRentCar.toNumber() });
+    
+            console.log("#########UpdateRentCar Success########");
+    
+        }else{
+            _param.getMyRentCar().then(result =>{
+                this.setState({ myRentCar: result.toNumber() });
+            })
+            console.log("#########UpdateRentCar ERROR########");
+        }
         console.log("#########END updateRentCar########");
     }
 
