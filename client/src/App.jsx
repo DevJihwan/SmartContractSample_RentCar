@@ -64,18 +64,19 @@ class App extends Component {
 
         console.log("#########STEP00. this.state.rentalInstance########"+this.state.rentalInstance);
 
-        this.state.rentalInstance.rentCar({
-            from: this.state.myAccount,
-            value: this.state.web3.utils.toWei("10", "ether"),
-            gas: 900000
-        });
+        await this.state.rentalInstance.rentCar(
+            
+            {   from: this.state.myAccount,
+                value: this.state.web3.utils.toWei("2", "ether"),
+                gas: 900000     }
+        );
 
-        // this.state.rentalInstance.getMyRentCar().then(result => {
-        //     this.setState({ myRentCar: result.toNumber() });
-        // });
-
+        await this.updateRentCar();
+        
         console.log("#########END rentCar########");
     }
+
+
     returnRentCar = async() => {
         console.log("#########START returnRentCar########");
 
@@ -84,10 +85,6 @@ class App extends Component {
         this.state.rentalInstance.returnRentCar({
             from: this.state.myAccount,
             gas: 900000
-        });
-
-        this.state.rentalInstance.getMyRentCar().then(result => {
-            this.setState({ myRentCar: result.toNumber() });
         });
 
         console.log("#########END returnRentCar########");
@@ -105,12 +102,10 @@ class App extends Component {
         console.log("#########STEP02. this.state.rentalInstance : ########" + this.state.rentalInstance);
 
         //this.rentalInstance 값이 셋팅 되었는지 확인하고 진행한다. 
-        if(this.rentalInstance != null){
+        if(this.state.rentalInstance != null){
 
             let getMyRentCar = await this.state.rentalInstance.getMyRentCar();
-
             this.setState({ myRentCar: getMyRentCar.toNumber() });
-    
             console.log("#########UpdateRentCar Success########");
     
         }else{
