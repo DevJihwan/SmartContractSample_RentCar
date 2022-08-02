@@ -4,9 +4,9 @@
 # 개발환경 구성
     1. geth 
     2. truffle (프레임워크)
-
-
-
+        -> truffle 설치 방법 : npm install -g truffle 
+        -> truffle 버전 확인 방법 : truffle --version 
+        -> turrlfe 버전 업데이트 방법 : npm uninstall -g truffle (트러플 삭제), npm install -g truffle(트러플 설치))
 
 # init 
     01. truffle --version    (버전 확인)
@@ -23,6 +23,10 @@
 # npm install @truffle/contract
 -   [npm] : https://www.npmjs.com/package/@truffle/contract
 
-# To-do
-    01. updateRentalCar 정비 -> 렌트한 차량 수 업데이트 반영
-    02. 현재 내 계좌 잔액 표시 
+# 부족했던 점 
+    00. web3.js으로 메타마스크 연결 후 지갑 주소와 잔액을 불러오는 부분
+    01. React 비동기 setState에 대한 이해
+
+# 배운 점 📝
+    00. 스마트컨트랙트 작성 후 배포하는 방법 (배포할 때도 ETH이 필요하다는 점..)
+
