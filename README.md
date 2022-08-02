@@ -23,10 +23,10 @@
 # npm install @truffle/contract
 -   [npm] : https://www.npmjs.com/package/@truffle/contract
 
-# 부족했던 점 
+# 📝 부족했던 점 
     00. web3.js으로 메타마스크 연결 후 지갑 주소와 잔액을 불러오는 부분
     01. React 비동기 setState에 대한 이해
 
-# 배운 점 📝
+# 📝 배운 점
     00. 스마트컨트랙트 작성 후 배포하는 방법 (배포할 때도 ETH이 필요하다는 점..)
 
